@@ -1,0 +1,5 @@
+**/.settings/
+# Build directories and generated files
+# /build/
+# /build-*/
+**/build/
