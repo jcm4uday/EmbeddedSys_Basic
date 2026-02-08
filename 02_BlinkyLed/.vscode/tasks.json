@@ -1,0 +1,53 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cmake",
+			"label": "CMake: build",
+			"command": "build",
+			"targets": [
+				"02_BlinkyLed"
+			],
+			"preset": "Debug",
+			"group": "build",
+			"problemMatcher": [],
+			"detail": "CMake template build task"
+		},
+		{
+			"label": "Flash: STM32CubeProgrammer",
+			"type": "shell",
+			"command": "${config:STM32VSCodeExtension.cubeCLT.path}/STM32CubeProgrammer/bin/STM32_Programmer_CLI.exe",
+			"args": [
+				"-c",
+				"port=SWD",
+				"-w",
+				"${workspaceFolder}/build/Debug/02_BlinkyLed.hex",
+				"-v",
+				"--rst"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
+			"dependsOn": "CMake: build",
+			"dependsOrder": "sequence",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build & Flash",
+			"dependsOn": [
+				"CMake: build",
+				"Flash: STM32CubeProgrammer"
+			],
+			"dependsOrder": "sequence",
+			"problemMatcher": []
+		},
+		{
+			"type": "cmake",
+			"label": "CMake: clean",
+			"command": "clean",
+			"problemMatcher": [],
+			"detail": "CMake template clean task"
+		}
+	]
+}
