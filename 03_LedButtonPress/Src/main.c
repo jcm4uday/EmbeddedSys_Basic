@@ -17,13 +17,8 @@
  */
 
 #include <stdint.h>
+#include "gpio.h"
 
-// enable clock using RCC
-#define RCC_BASE_ADDR 0x40023800U
-#define RCC_AHB1ENR_OFFSET 0x30U
-#define RCC_AHB1ENR (*(volatile uint32_t *)(RCC_BASE_ADDR + RCC_AHB1ENR_OFFSET)) // type casting to pointer and dereferencing to read/write of the register
-#define RCC_GPIOAEN 0x0U
-#define RCC_GPIODEN 0x3U
 /* LED pins on DISC1 board PD12-PD16 */
 /* Set GPIO D mode to output and write to output register*/
 #define GPIOD_BASE_ADDR 0x40020C00U
@@ -54,10 +49,10 @@ int main(void)
     /* Buttons on DISC1 board USR - PA0*/
 
     /* Enable GPIOA clock */
-    RCC_AHB1ENR |= (1U << RCC_GPIOAEN);
+    configureGpioAClk();
 
     /* Enable GPIOD clock */
-    RCC_AHB1ENR |= (1U << RCC_GPIODEN);
+    configureGpioDClk();
 
     /* Set PD12 as output */
     // /* clear selection of bits you want to write to */

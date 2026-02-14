@@ -21,7 +21,7 @@
 #
 
 # Core project settings
-project("01_LedOn")
+project("03_LedButtonPress")
 enable_language(C CXX ASM)
 message("Build type: " ${CMAKE_BUILD_TYPE})
 
@@ -43,11 +43,14 @@ set(cpu_PARAMS
 # Sources
 set(sources_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/gpio.c
 )
 
 # Include directories for all compilers
 set(include_DIRS
-	${CMAKE_CURRENT_SOURCE_DIR}/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/CMSIS/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/CMSIS/Device/ST/STM32F4xx/Include
 )
 
 # Include directories for each compiler
@@ -167,3 +170,20 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.hex
     COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.bin
 )
+
+# Add CMSIS as a library (if it contains compilable sources)
+add_library(cmsis INTERFACE)
+
+# Add CMSIS include directories
+target_include_directories(cmsis INTERFACE
+    ${CMAKE_CURRENT_SOURCE_DIR}/CMSIS/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/CMSIS/Device/ST/STM32F4xx/Include
+)
+
+# Add CMSIS compile definitions if needed
+target_compile_definitions(cmsis INTERFACE
+    STM32F407xx  # Specify your device variant
+)
+
+# Link CMSIS to your executable
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cmsis)

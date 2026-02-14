@@ -6,14 +6,13 @@
 			"label": "CMake: build",
 			"command": "build",
 			"targets": [
-				"01_LedOn"
+				"03_LedButtonPress"
 			],
 			"preset": "Debug",
 			"group": "build",
 			"problemMatcher": [],
 			"detail": "CMake template build task"
 		},
-
 		{
 			"label": "Flash: STM32CubeProgrammer",
 			"type": "shell",
@@ -22,7 +21,7 @@
 				"-c",
 				"port=SWD",
 				"-w",
-				"${workspaceFolder}/build/Debug/01_LedOn.hex",
+				"${workspaceFolder}/build/Debug/03_LedButtonPress.hex",
 				"-v",
 				"--rst"
 			],
@@ -34,7 +33,6 @@
 			"dependsOrder": "sequence",
 			"problemMatcher": []
 		},
-
 		{
 			"label": "Build & Flash",
 			"dependsOn": [
@@ -43,6 +41,14 @@
 			],
 			"dependsOrder": "sequence",
 			"problemMatcher": []
+		},
+		{
+			"type": "cmake",
+			"label": "CMake: clean",
+			"command": "clean",
+			"preset": "Debug",
+			"problemMatcher": [],
+			"detail": "CMake template clean task"
 		}
 	]
 }
