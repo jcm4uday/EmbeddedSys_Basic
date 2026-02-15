@@ -19,33 +19,17 @@
 #include <stdint.h>
 #include "gpio.h"
 
-/* LED pins on DISC1 board PD12-PD16 */
-/* Set GPIO D mode to output and write to output register*/
-#define GPIOD_BASE_ADDR 0x40020C00U
-#define GPIOA_BASE_ADDR 0x40020000U
 
-#define GPIOx_MODER_OFFSET 0x00U
-#define GPIOx_IDR_OFFSET 0x10U
-#define GPIOx_ODR_OFFSET 0x14U
-#define GPIOx_BSRR_OFFSET 0x18U
-
-#define GPIOD_MODER (*(volatile uint32_t *)(GPIOD_BASE_ADDR + GPIOx_MODER_OFFSET))
-#define GPIOD_ODR (*(volatile uint32_t *)(GPIOD_BASE_ADDR + GPIOx_ODR_OFFSET))
-#define GPIOD_BSRR (*(volatile uint32_t *)(GPIOD_BASE_ADDR + GPIOx_BSRR_OFFSET))
-
-#define GPIOA_MODER (*(volatile uint32_t *)(GPIOA_BASE_ADDR + GPIOx_MODER_OFFSET))
-#define GPIOA_IDR (*(volatile uint32_t *)(GPIOA_BASE_ADDR + GPIOx_IDR_OFFSET))
-
-#define GPIOx_0_Pos 0U
-#define GPIOx_12_Pos 12U
-#define RESET_STATE 0U
-
-
+/* LED button press using custom GPIO functions. LED pins on DISC1 board are between GPIOD P12-P16 
+and GPIOA pin zero connects to the user button on the board*/
 
 int main(void)
 {
-    uint32_t GPIO_PIN_ZERO = 0;
+    uint8_t readGpioPinZero = 0;
     /* LED pins on DISC1 board PD12-PD16 */
+    uint8_t gpioPin12 = 12U;
+    uint8_t gpioPin0 = 0U;
+
     /* Buttons on DISC1 board USR - PA0*/
 
     /* Enable GPIOA clock */
@@ -54,35 +38,26 @@ int main(void)
     /* Enable GPIOD clock */
     configureGpioDClk();
 
-    /* Set PD12 as output */
-    // /* clear selection of bits you want to write to */
-    GPIOD_MODER &= ~((uint32_t)0x3U << (GPIOx_12_Pos * 2U));
-    /* write 01 into selection of position*/
-    GPIOD_MODER |=  ((uint32_t)0x1U << (GPIOx_12_Pos * 2U));
+    /* Set PD12 as output on GPIOD */
+    setGpioMode(GPIOD, gpioPin12, OUTPUT);
 
     /* Set PA0 as input */
-    // /* clear selection of bits you want to write to */
-    GPIOA_MODER &= ~((uint32_t)0x3U << (GPIOx_0_Pos));
+    setGpioMode(GPIOA, gpioPin0, INPUT);
 
     /* Loop forever */
 	while(1)
     {   
-        GPIO_PIN_ZERO = GPIOA_IDR & 0x00000001;
-        if(GPIO_PIN_ZERO == RESET_STATE)
+        /* Read status of GPIOA pin Zero*/
+        readGpioPinZero = getGpioPinData(GPIOA, gpioPin0);
+        if(readGpioPinZero == RESET)
         {
-            /* Turn on LEDs PD12 */
-            GPIOD_BSRR |=  ((uint32_t)0x1U << (28U));       // Reset the ODR bit corresponding to pin
-            // GPIOD_ODR |= (0U << GPIOx_12_Pos);
+            /* Turn off LEDs PD12 */
+            gpioOutputSetReset(GPIOD, gpioPin12, RESET);
         }
         else {
-
             /* Turn on LEDs PD12 */
-
-            // GPIOD_ODR |= (1U << GPIOx_12_Pos);
-            GPIOD_BSRR |=  (0x1U << (GPIOx_12_Pos));        // set the ODR bit corresponding to pin
-        
+            gpioOutputSetReset(GPIOD, gpioPin12, SET);      
         }
-
     };
 
     return 0;

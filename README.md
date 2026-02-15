@@ -8,6 +8,9 @@ A minimal GPIO configuration example for turning on an LED using a button on the
 ### 02_BlinkyLed  
 A STM32 project demonstrating LED blinking with a structured way of accessing GPIO and RCC register.
 
+### 02_LedButtonPress
+Turning on an LED using a button on the STM32 DISC1 board using custom GPIO drivers.
+
 ## Tech stack
 C and Assembly for embedded logic
 
