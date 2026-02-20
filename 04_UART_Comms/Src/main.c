@@ -18,31 +18,29 @@
 
 #include <stdint.h>
 #include "gpio.h"
+#include "uart.h"
 
 
-/* LED button press using custom GPIO functions. LED pins on DISC1 board are between GPIOD P12-P16 
-and GPIOA pin zero connects to the user button on the board*/
+/* PA2 TX data out. PA3 RX data In*/
 
 int main(void)
 {
+    
     uint8_t readGpioPinZero = 0;
     /* LED pins on DISC1 board PD12-PD16 */
-    uint8_t gpioPin12 = 12U;
-    uint8_t gpioPin0 = 0U;
+    uint8_t gpioPin2 = 2U;
+    uint8_t gpioPin3 = 3U;
 
     /* Buttons on DISC1 board USR - PA0*/
 
     /* Enable GPIOA clock */
     configureGpioAClk();
 
-    /* Enable GPIOD clock */
-    configureGpioDClk();
+    /* Set PA2 as output on GPIOD */
+    setGpioMode(GPIOA, gpioPin2, ALT_FUNC);
 
-    /* Set PD12 as output on GPIOD */
-    setGpioMode(GPIOD, gpioPin12, OUTPUT);
-
-    /* Set PA0 as input */
-    setGpioMode(GPIOA, gpioPin0, INPUT);
+    /* Set PA3 as input */
+    setGpioMode(GPIOA, gpioPin3, ALT_FUNC);
 
     /* Loop forever */
 	while(1)
