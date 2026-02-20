@@ -8,8 +8,11 @@ A minimal GPIO configuration example for turning on an LED using a button on the
 ### 02_BlinkyLed  
 A STM32 project demonstrating LED blinking with a structured way of accessing GPIO and RCC register.
 
-### 02_LedButtonPress
+### 03_LedButtonPress
 Turning on an LED using a button on the STM32 DISC1 board using custom GPIO drivers.
+
+### 04_UART_Comms
+Implement serial command interface using UART. This module should listen to user for valid commands and resopond accordingly.
 
 ## Tech stack
 C and Assembly for embedded logic
