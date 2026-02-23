@@ -3,10 +3,14 @@
 
 typedef enum{
     INPUT = 0,
-    OUTPUT = 1
+    OUTPUT = 1,
+    ALT_FUNC = 2,
+    ANALOG = 3
 }ModeType_t;
 
 #define OFFST_ONE   1U
+#define OFFST_TWO   2U
+#define OFFST_THREE 3U
 #define OFFSET_16   16U
 
 void configureGpioAClk(void);

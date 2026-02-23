@@ -1,4 +1,7 @@
 /*Initialise UART peripheral*/
+/*Clock config using RCC_APB1ENR set  bit5 to enable USART*/
+
+/*USART2_TX, USART2_RX on PA2 and PA3*/
 
 /*Configure baud rate for UART*/
 

@@ -35,12 +35,17 @@ int main(void)
 
     /* Enable GPIOA clock */
     configureGpioAClk();
+    /*GPIOx_AFRL set to 0111: AF7 -> UART */
 
-    /* Set PA2 as output on GPIOD */
+    /* Set PA2 as alternate function*/
     setGpioMode(GPIOA, gpioPin2, ALT_FUNC);
 
-    /* Set PA3 as input */
+    /* Set PA3 as alt_func */
     setGpioMode(GPIOA, gpioPin3, ALT_FUNC);
+
+    /*Init UART configuration*/
+
+    /*Configure PA2 and PA3 as UART TX and RX pins*/
 
     /* Loop forever */
 	while(1)
