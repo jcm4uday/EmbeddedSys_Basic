@@ -17,6 +17,7 @@
  */
 
 #include <stdint.h>
+#include <stdio.h>
 #include "gpio.h"
 #include "uart.h"
 
@@ -25,17 +26,16 @@
 
 int main(void)
 {
-    
-    uint8_t readGpioPinZero = 0;
     /* LED pins on DISC1 board PD12-PD16 */
     uint8_t gpioPin2 = 2U;
     uint8_t gpioPin3 = 3U;
+    uint8_t uartAltFun = 7U;
 
     /* Buttons on DISC1 board USR - PA0*/
 
     /* Enable GPIOA clock */
     configureGpioAClk();
-    /*GPIOx_AFRL set to 0111: AF7 -> UART */
+
 
     /* Set PA2 as alternate function*/
     setGpioMode(GPIOA, gpioPin2, ALT_FUNC);
@@ -43,24 +43,29 @@ int main(void)
     /* Set PA3 as alt_func */
     setGpioMode(GPIOA, gpioPin3, ALT_FUNC);
 
-    /*Init UART configuration*/
+    /*Set GPIO alt function to UART*/
+    /*GPIOx_AFRL set to 0111: AF7 -> UART */
+    setGpioAltFun(GPIOA, gpioPin2, uartAltFun);
+    setGpioAltFun(GPIOA, gpioPin3, uartAltFun);
 
-    /*Configure PA2 and PA3 as UART TX and RX pins*/
+    /*Set GPIO PUPD register to avoid floating inputs*/
+
+    /*Init UART configuration*/
+    configureUart2Clk();
+
+    /*Set baud rate for UART*/
+    configureUart2BaudRate();
+
+    /*Configure UART TX,RX UE pins*/
+    configureUart2Register();
 
     /* Loop forever */
 	while(1)
     {   
-        /* Read status of GPIOA pin Zero*/
-        readGpioPinZero = getGpioPinData(GPIOA, gpioPin0);
-        if(readGpioPinZero == RESET)
-        {
-            /* Turn off LEDs PD12 */
-            gpioOutputSetReset(GPIOD, gpioPin12, RESET);
-        }
-        else {
-            /* Turn on LEDs PD12 */
-            gpioOutputSetReset(GPIOD, gpioPin12, SET);      
-        }
+        uint32_t tempVar;
+        tempVar = uart2RxData();
+        printf("Value read from terminal: %d\n", tempVar);
+
     };
 
     return 0;

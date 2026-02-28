@@ -27,22 +27,26 @@ void setGpioMode(GPIO_TypeDef* gpioPort, uint8_t pinNumber, ModeType_t setMode)
     // tempModeMask = (0x3U << tempModePos); /* set mask 11 in the position specified*/
     
     /*Set LSB of relevant bits 01 that makes output mode*/
-    switch (setMode) {
-        case 1: /* set OUTPUT mode 01*/
+    switch (setMode) 
+    {
+        case OUTPUT: /* set OUTPUT mode 01*/
             gpioPort->MODER &= ~(OFFST_TWO << tempModePos);
             gpioPort->MODER |= (OFFST_ONE << tempModePos);
+            break;
             
-        case 2: /* set ALT_FUN mode 10*/
+        case ALT_FUNC: /* set ALT_FUN mode 10*/
             gpioPort->MODER &= ~(OFFST_ONE << tempModePos);
             gpioPort->MODER |= (OFFST_TWO << tempModePos);
+            break;
 
-        case 3: /* set ALT_FUN mode 11*/
+        case ANALOG: /* set ALT_FUN mode 11*/
             gpioPort->MODER |= (OFFST_THREE << tempModePos);
+            break;
 
         default:
             /*Clear the pin mode register bits. By default input state 00*/
             gpioPort->MODER &= ~(OFFST_THREE << tempModePos); /* set mask 11 in the position specified and NOT operation performed*/
-
+            break;
     
     }
 
@@ -71,7 +75,8 @@ uint8_t getGpioPinData(GPIO_TypeDef* gpioPort, uint8_t pinNumber)
 
 void setGpioAltFun(GPIO_TypeDef* gpioPort, uint8_t pinNumber, uint8_t altFun)
 {
-    uint8_t tempPinNumber;
+    uint8_t tempPinNumber = 0;
+    uint32_t tempPinMask = 0;
     /*Pin number starts from 0 to 15*/
 
     if(pinNumber >= 8)
@@ -81,8 +86,9 @@ void setGpioAltFun(GPIO_TypeDef* gpioPort, uint8_t pinNumber, uint8_t altFun)
         gpioPort->AFR[1] &= ~(0xFU << tempPinMask);
         gpioPort->AFR[1] |= (altFun << tempPinMask);
     }
-    else if (pinNumber <=0) 
+    else if (pinNumber < 8)
     {
+        tempPinNumber = pinNumber;
         tempPinMask = (tempPinNumber * 4);
         gpioPort->AFR[0] &= ~(0xFU << tempPinMask);
         gpioPort->AFR[0] |= (altFun << tempPinMask);
