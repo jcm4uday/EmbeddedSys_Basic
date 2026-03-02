@@ -19,4 +19,5 @@ void setGpioMode(GPIO_TypeDef* gpioPort, uint8_t pinNumber, ModeType_t setMode);
 void gpioOutputSetReset(GPIO_TypeDef* gpioPort, uint8_t pinNumber, FlagStatus setResetVar);
 uint8_t getGpioPinData(GPIO_TypeDef* gpioPort, uint8_t pinNumber);
 void setGpioAltFun(GPIO_TypeDef* gpioPort, uint8_t pinNumber, uint8_t altFun);
+void gpioConfigPupdr(GPIO_TypeDef* gpioPort, uint8_t pinNumber);
 

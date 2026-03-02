@@ -96,3 +96,14 @@ void setGpioAltFun(GPIO_TypeDef* gpioPort, uint8_t pinNumber, uint8_t altFun)
     }
 
 }
+
+void gpioConfigPupdr(GPIO_TypeDef* gpioPort, uint8_t pinNumber)
+{
+    
+    uint32_t tempPinMask = 0;
+    tempPinMask = (pinNumber * 2);
+    gpioPort->PUPDR &= ~(OFFST_THREE << tempPinMask);     /*Clear the two bits based on the pin number*/
+    gpioPort->PUPDR |= (OFFST_ONE << tempPinMask);        /* Set LSB of the two bits to 1 for Pull-up config*/
+    /*TODO: for pull down and other configs need a switch case and additional input parameter for config*/
+
+}

@@ -12,10 +12,13 @@ void configureUart2Clk(void)
 // Done through GPIO settings
 
 /*Configure baud rate for UART - 9600*/
-/*USARTDIV = 42Mhz/(16* 9600) =>273.4375. Using Over8 as 0. Usart_BRR = 0x1117 mantissa is 0x111 and fraction 0d7*/
+/* RCC->CFGR provides information: Using HSI by reading  SW0,SW1. Prescalar PPRE1 set to 0. So clock not divided*/
+/*USARTDIV = 16Mhz/(9600) =>1666.6667. Using Over8 as 0. Usart_BRR = 0x682B mantissa is 0x682 
+ and fraction is (0.6667*16)= 10.667 => 11 => 0xB */
+/*Invalid: USARTDIV = 42Mhz/(16* 9600) =>273.4375. Using Over8 as 0. Usart_BRR = 0x1117 mantissa is 0x111 and fraction 0d7*/
 void configureUart2BaudRate(void)
 {
-    USART2->BRR = 0x1117;
+    USART2->BRR = 0x682B;
 }
 
 

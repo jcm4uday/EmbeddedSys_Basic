@@ -26,7 +26,6 @@
 
 int main(void)
 {
-    /* LED pins on DISC1 board PD12-PD16 */
     uint8_t gpioPin2 = 2U;
     uint8_t gpioPin3 = 3U;
     uint8_t uartAltFun = 7U;
@@ -36,12 +35,18 @@ int main(void)
     /* Enable GPIOA clock */
     configureGpioAClk();
 
+    /*Init UART configuration*/
+    configureUart2Clk();
+
 
     /* Set PA2 as alternate function*/
     setGpioMode(GPIOA, gpioPin2, ALT_FUNC);
 
     /* Set PA3 as alt_func */
     setGpioMode(GPIOA, gpioPin3, ALT_FUNC);
+
+    /*Set 01: Pull-up on the register*/
+    gpioConfigPupdr(GPIOA, gpioPin3);
 
     /*Set GPIO alt function to UART*/
     /*GPIOx_AFRL set to 0111: AF7 -> UART */
@@ -50,8 +55,7 @@ int main(void)
 
     /*Set GPIO PUPD register to avoid floating inputs*/
 
-    /*Init UART configuration*/
-    configureUart2Clk();
+
 
     /*Set baud rate for UART*/
     configureUart2BaudRate();
